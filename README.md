@@ -36,6 +36,6 @@ In some images, the color edited image may be distorted due to a bad median valu
 
 You can pass in an adjustment value into the command line via the `-t` flag to compensate for a bad median luminosity. The `-t` flag must be followed by a float value between -1.0 and 1.0 (inclusive). If a `-t` is not passed in, colorizer will assume a `-t` compensation of 0.0 (50% highlights and 50% shadows). A negative `-t` value pulls more than 50% of the image towards the shadow color and the strength of the effect is determined by how close to -1.0 the value is. A positive `-t` value pulls more than 50% of the image towards the highlight color and the strength of the effect is determined by how close to 1.0 the value is.
 
-`python colorize.py -f /Users/arudrrak/Desktop/Film/Testing -t .5`
+`python colorize.py -f /Users/arudrra/Images -t .5`
 
 
