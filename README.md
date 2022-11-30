@@ -1,6 +1,5 @@
 # Colorizer
 
-## Introduction
 Colorizer pulls the brighter areas (highlights) and darker areas (shadows) of an image towards two different user-defined colors. You can use this tool to add user-defined tones to your images.
 
 ## Usage
