@@ -16,6 +16,7 @@ MAX_LUMINOSITY = float((LUMINOSITY_R + LUMINOSITY_G + LUMINOSITY_B) * 255)
 #You can adjust THRESHOLD, HIGHLIGHT_BOOST, SHADOW_BASE, and HIGHLIGHT_BASE
 THRESHOLD = 5
 HIGHLIGHT_BOOST = 50
+SAMPLING_INTERVAL = 10
 
 #RGB values of base tones that you like
 #Shadow (darker) tones will get pulled closer to the shadow base
@@ -66,6 +67,24 @@ def colorize(image_path, file_to_save_as):
     original_image_pixel_map = original_image.load()
     new_image = Image.new(original_image.mode, [original_image.size[0], original_image.size[1]])
     new_image_pixel_map = new_image.load()
+
+    #Sample the threshold at equally spaced points on the image
+    #Use the median threshold to detemine highlights (anything higher than the median)
+    #and shadows (anything lower than the median)
+    thresholds = []
+    threshold_row = 0
+    threshold_col = 0
+    while threshold_row < original_image.size[0]:
+        while threshold_col < original_image.size[1]:
+            pixel = original_image_pixel_map[threshold_row, threshold_col]
+            luminosity = (int)((0.3 * pixel[0]) + (0.59 * pixel[1]) + (0.11 * pixel[2]))
+            thresholds.append(luminosity)
+            threshold_col += SAMPLING_INTERVAL
+        threshold_col = 0
+        threshold_row += SAMPLING_INTERVAL
+    thresholds.sort()
+    THRESHOLD = thresholds[int(len(thresholds)/2)]
+
     for row in range(original_image.size[0]):
         for col in range(original_image.size[1]):
             pixel = original_image_pixel_map[row, col]
@@ -83,7 +102,7 @@ def colorize(image_path, file_to_save_as):
             new_pixel = (int(math.sqrt(abs(new_pixel[0] - pixel[0]))) + min(new_pixel[0], pixel[0]), int(math.sqrt(abs(new_pixel[1] - pixel[1]))) + min(new_pixel[1], pixel[1]), int(math.sqrt(abs(new_pixel[2] - pixel[2]))) + min(new_pixel[2], pixel[2]))
             # new_pixel = colorsys. colorsys.rgb_to_hsv(float(pixel[0])/255.0,pixel_hsv[1],pixel_hsv[2])
             new_image_pixel_map[row,col] = new_pixel
-            #Setting new_image_pixel to the following makes the image black and white instead:
+            #Setting new_image_pixel to the following (luminosity) makes the image black and white instead:
             #new_image_pixel_map[row,col] = (luminosity, luminosity, luminosity)
     original_image.close()
     new_image.save(file_to_save_as)
