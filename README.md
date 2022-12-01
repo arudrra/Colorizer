@@ -38,7 +38,7 @@ Colorizer will then apply the color edits to all supported files in the specifie
 
 Colorizer supports files with JPG, JPEG, and PNG extensions. You can add or remove supported filetypes by modifying the SUPPORTED_EXTENSIONS list in the script. 
 
-### Specifying Filepath
+### Python Versions
 Colorizer requires python3 to work. Depending on your environment, you may have to use python3 instead of python when running colorize:
 `python3 colorize.py -f /Users/arudrra/Images`
 
