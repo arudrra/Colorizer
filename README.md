@@ -22,7 +22,7 @@ To install PIL, you can run the following command:
 
 `pip install Pillow`
 
-If you don't have pip, you can try and install it using the instructions [here](https://pillow.readthedocs.io/en/stable/installation.html).
+If you don't have pip, you can try and install PIL using the instructions [here](https://pillow.readthedocs.io/en/stable/installation.html).
 
 ### Specifying Filepath
 
@@ -49,7 +49,7 @@ By default, highlights (brighter parts of the image) are pulled towards orange a
 
 `python colorize.py -f /Users/arudrra/Images -srgb 100 141 145 -hrgb 194 0 24`
 
-Here is how the original image would look with the command above. The shadows are pulled towards the blue tone rgb(100,141,145) and shadows pulled towards the red tone rgb(194,0,24) thus overriding the original orange and teal tones.
+Here is how the original image would look with the command above. The shadows are pulled towards the blue tone rgb(100,141,145) and highlights are pulled towards the red tone rgb(194,0,24) thus overriding the original orange and teal tones.
 
 ![Imgur](https://i.imgur.com/LgxtiET.jpg)
 
@@ -62,5 +62,3 @@ In some images, the color edited image may be distorted due to a bad median valu
 You can pass in an adjustment value into the command line via the `-t` flag to compensate for a bad median luminosity. The `-t` flag must be followed by a float value between -1.0 and 1.0 (inclusive). If a `-t` is not passed in, colorizer will assume a `-t` compensation of 0.0 (50% highlights and 50% shadows). A negative `-t` value pulls more than 50% of the image towards the shadow color and the strength of the effect is determined by how close to -1.0 the value is. A positive `-t` value pulls more than 50% of the image towards the highlight color and the strength of the effect is determined by how close to 1.0 the value is.
 
 `python colorize.py -f /Users/arudrra/Images -t .5`
-
-
