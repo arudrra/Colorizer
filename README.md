@@ -22,7 +22,7 @@ To install PIL, you can run the following command:
 
 `pip install Pillow`
 
-If you don't have pip, you can try and install it using the instructions [here](https://pillow.readthedocs.io/en/stable/installation.html)
+If you don't have pip, you can try and install it using the instructions [here](https://pillow.readthedocs.io/en/stable/installation.html).
 
 ### Specifying Filepath
 
@@ -54,7 +54,7 @@ Here is how the original image would look with the command above. The shadows ar
 ![Imgur](https://i.imgur.com/LgxtiET.jpg)
 
 ### Computing the Median Luminosity
-Colorizer computes the threshold luminosity (brightness) of the image by sampling evenly spaced pixels. The median luminosity of sampled pictures is used as a threshold for pulling colors. Any pixels below with a luminosity lower than the median are classified as shadows while any pixels with a luminosity greater than the median are classified as highlights. Sampling for the median luminosity allows colorizer to classify and pull roughly 50% of the pixels in an image towards one color while pulling the remaining 50% of the pixels towards the other color.
+Colorizer computes the threshold luminosity (brightness) of the image by sampling evenly spaced pixels. The median luminosity of sampled pictures is used as a threshold for pulling colors. Any pixels with a luminosity lower than the median are classified as shadows while any pixels with a luminosity greater than the median are classified as highlights. Sampling for the median luminosity allows colorizer to classify and pull roughly 50% of the pixels in an image towards one color while pulling the remaining 50% of the pixels towards the other color.
 
 ### Adjusting for Distortion
 In some images, the color edited image may be distorted due to a bad median value. For example, if most of the image is extremely bright (75% of the pixels are highlights), the median sampling will still force half of the pixels to be pulled towards the shadows (darker tones) so 25% of the highlight pixels will be misclassified as shadows.
