@@ -1,12 +1,36 @@
 # Colorizer
 
-Colorizer pulls the brighter areas (highlights) and darker areas (shadows) of an image towards two different user-defined colors. You can use this tool to add user-defined tones to your images.
+Colorizer was inspired by recent photography trends where images are often edited with orange and teal tones. Colorizer pulls the brighter areas (highlights) and darker areas (shadows) of an image towards two different colors (orange and teal by default). You can use this tool to add strong tones to your images.
+
+Here is a sample image:
+
+![Imgur](https://i.imgur.com/mieVhD2.jpg)
+
+Here is the same image run through colorizer with the default settings:
+
+![Imgur](https://i.imgur.com/ofig8nj.jpg)
 
 ## Usage
+
+### Dependencies
+
+To run colorizer, you will need Python and the Python Imaging Library (PIL).
+
+You can install Python [here](https://www.python.org/downloads/).
+
+To install PIL, you can run the following command:
+
+`pip install Pillow`
+
+If you don't have pip, you can try and install it using the instructions [here](https://pillow.readthedocs.io/en/stable/installation.html)
 
 ### Specifying Filepath
 
 To run colorizer on one or more pictures, you must specify a folder with supported images. You can specify the filepath for the folder with images by using the `-f` flag as follows:
+
+`python colorize.py -f insert_filepath_here`
+
+If the folder with images is /Users/arudrra/Images, here is how the command should look:
 
 `python colorize.py -f /Users/arudrra/Images`
 
@@ -25,7 +49,9 @@ By default, highlights (brighter parts of the image) are pulled towards orange a
 
 `python colorize.py -f /Users/arudrra/Images -srgb 100 141 145 -hrgb 194 0 24`
 
-The `-srgb 100 141 145` flag pulls the shadows towards rgb(100,141,145) and the `-hrgb 194 0 24` flag pulls the highlights towards rgb(194,0,24).
+Here is how the original image would look with the command above. The shadows are pulled towards the blue tone rgb(100,141,145) and shadows pulled towards the red tone rgb(194,0,24) thus overriding the original orange and teal tones.
+
+![Imgur](https://i.imgur.com/LgxtiET.jpg)
 
 ### Computing the Median Luminosity
 Colorizer computes the threshold luminosity (brightness) of the image by sampling evenly spaced pixels. The median luminosity of sampled pictures is used as a threshold for pulling colors. Any pixels below with a luminosity lower than the median are classified as shadows while any pixels with a luminosity greater than the median are classified as highlights. Sampling for the median luminosity allows colorizer to classify and pull roughly 50% of the pixels in an image towards one color while pulling the remaining 50% of the pixels towards the other color.
