@@ -80,7 +80,7 @@ def colorize(image_path, file_to_save_as):
     while threshold_row < original_image.size[0]:
         while threshold_col < original_image.size[1]:
             pixel = original_image_pixel_map[threshold_row, threshold_col]
-            luminosity = (int)((0.3 * pixel[0]) + (0.59 * pixel[1]) + (0.11 * pixel[2]))
+            luminosity = (int)((LUMINOSITY_R * pixel[0]) + (LUMINOSITY_G * pixel[1]) + (LUMINOSITY_B * pixel[2]))
             thresholds.append(luminosity)
             threshold_col += SAMPLING_INTERVAL
         threshold_col = 0
@@ -97,7 +97,7 @@ def colorize(image_path, file_to_save_as):
         for col in range(original_image.size[1]):
             pixel = original_image_pixel_map[row, col]
             #Measure the luminosity or "brightness" of the pixel
-            luminosity = (int)((0.3 * pixel[0]) + (0.59 * pixel[1]) + (0.11 * pixel[2]))
+            luminosity = (int)((LUMINOSITY_R * pixel[0]) + (LUMINOSITY_G * pixel[1]) + (LUMINOSITY_B * pixel[2]))
             new_pixel = pixel
             #Convert pixel from RGB representation to HSV
             pixel_hsv = colorsys.rgb_to_hsv(float(pixel[0])/255.0,float(pixel[1])/255.0,float(pixel[2])/255.0)
@@ -155,4 +155,3 @@ def main():
 
 if __name__=="__main__":
     main()
-
