@@ -121,6 +121,7 @@ def colorize(image_path, file_to_save_as):
 #Calls color edit function on each file (in addition to creating the file save path)
 def colorize_all(files):
     for file in files:
+        print("Colorizing File " + str(file))
         #handles files where there are multiple .'s
         extensions = file.suffixes
         ending = ""
@@ -131,6 +132,7 @@ def colorize_all(files):
         file_to_save_as = file[:-len(ending)] + MODIFIED_FILENAME_ADDITION + ending
         #edit the colors and save the file to the new filepath
         colorize(file, file_to_save_as)
+        print("File saved to " + file_to_save_as)
 
 def main():
     #Set up arguments for input
