@@ -34,13 +34,16 @@ If the folder with images is /Users/arudrra/Images, here is how the command shou
 
 `python colorize.py -f /Users/arudrra/Images`
 
-Colorizer will then apply the color edits to all supported files in the specified folder (/Users/arudrra/Images in the example above).
+Colorizer will then apply the color edits to all supported files in the specified folder (/Users/arudrra/Images in the example above). Colorizer saves the file to the same folder with a `_colorized` appended to the end of the filename. You can edit the file ending by changing the `MODIFIED_FILENAME_ADDITION` global in the colorize.py file.
 
-Colorizer supports files with JPG, JPEG, and PNG extensions. You can add or remove supported filetypes by modifying the SUPPORTED_EXTENSIONS list in the script. 
+Colorizer supports files with JPG, JPEG, and PNG extensions. You can add or remove supported file types by modifying the `SUPPORTED_EXTENSIONS` global in the script. 
 
 ### Python Versions
 Colorizer requires python3 to work. Depending on your environment, you may have to use python3 instead of python when running colorize:
 `python3 colorize.py -f /Users/arudrra/Images`
+
+### Runtime Notes
+Colorizer samples every image and computes every pixel value for each image. This process takes time, especially for larger images. Colorizer tells you which image is being processed at the moment and when the image has been colorized and saved. Quitting the script preemptively will cause the progress for the current image to be canceled.
 
 ## Under the Hood
 
