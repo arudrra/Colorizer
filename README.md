@@ -14,9 +14,13 @@ Here is the same image run through colorizer with the default settings:
 
 ### Dependencies
 
+If you already have python and pip installed, simply clone the repository and run `pip install -r requirements.txt` to install the necessary dependencies for Colorizer. You can skip the rest of the steps in the Dependencies section.
+
 To run colorizer, you will need Python and the Python Imaging Library (PIL).
 
 You can install Python [here](https://www.python.org/downloads/).
+
+To install PIL, you can run the following command:
 
 To install PIL, you can run the following command:
 
