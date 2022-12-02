@@ -22,8 +22,6 @@ You can install Python [here](https://www.python.org/downloads/).
 
 To install PIL, you can run the following command:
 
-To install PIL, you can run the following command:
-
 `pip install Pillow`
 
 If you don't have pip, you can try and install PIL using the instructions [here](https://pillow.readthedocs.io/en/stable/installation.html).
