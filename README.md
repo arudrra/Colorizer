@@ -1,3 +1,5 @@
+# Under Construction - I'm currently rewriting the readme to reflect the new changes and features. The current readme is outdated.
+
 # Colorizer
 
 Colorizer was inspired by recent photography trends where images are often edited with orange and teal tones. Colorizer pulls the brighter areas (highlights) and darker areas (shadows) of an image towards two different colors (orange and teal by default). You can use this tool to add strong tones to your images.
