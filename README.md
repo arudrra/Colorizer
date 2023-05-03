@@ -1,71 +1,97 @@
-# Under Construction - I'm currently rewriting the readme to reflect the new changes and features. The current readme is outdated.
+# Introduction
 
-# Colorizer
+Colorizer was inspired by recent photography trends where images are often edited with orange and teal tones. The image on the left is the original while the image on the right Colorizer.
 
-Colorizer was inspired by recent photography trends where images are often edited with orange and teal tones. Colorizer pulls the brighter areas (highlights) and darker areas (shadows) of an image towards two different colors (orange and teal by default). You can use this tool to add strong tones to your images.
+![Imgur](https://imgur.com/yyRh52s.jpg)
 
-Here is a sample image:
+## Setup
 
-![Imgur](https://i.imgur.com/mieVhD2.jpg)
+1. Clone the repository.
+2. Run `pip install -r requirements.txt` to install the necessary dependencies for Colorizer.
 
-Here is the same image run through colorizer with the default settings:
+## Colorizer
 
-![Imgur](https://i.imgur.com/ofig8nj.jpg)
+### How It Works
 
-## Usage
+Colorizer adds strong tones to images by pulling pixels to colors based on the brightness of the pixels. Each pixel falls into one of the following two categories:
 
-### Dependencies
+1. Shadows (darkest pixels in an image)
+2. Highlights (brightest pixels in an image)
 
-If you already have python and pip installed, simply clone the repository and run `pip install -r requirements.txt` to install the necessary dependencies for Colorizer. You can skip the rest of the steps in the Dependencies section.
+Each pixel's brightness is measured on a scale from 0 to 255. Now imagine two contiguous bins corresponding to the two categories:
 
-To run colorizer, you will need Python and the Python Imaging Library (PIL).
+1. A Shadow Bin containing pixels with a brightness value in between 0 and 89
+2. A Highlight Bin containing pixels with a brightness value in between 90 and 255
 
-You can install Python [here](https://www.python.org/downloads/).
+Colorizer maps the pixels in each bin to a different color. The image on the left is the original image while the images in the middle and right have been edited using colorizer:
 
-To install PIL, you can run the following command:
+![Imgur](https://imgur.com/WVKt0TV.jpg)
 
-`pip install Pillow`
+The image in the middle has been edited by colorizer using the default setting. All the pixels in the shadow bin have been pulled to teal while the remaining pixels in the highlight bin have pulled to orange. You can recreate the same look using the command `python colorizer.py -f <filepath> -splittone`. The image on the right has also been edited by colorizer but with a different color mapping. The shadows have been mapped to purple (hue value of 280) while the highlights have been mapped to yellow (hue value of 50). You can recreate the same look using the command `python colorizer.py -f <filepath> -splittone -shadowhue 280 -highlighthue 50`.
 
-If you don't have pip, you can try and install PIL using the instructions [here](https://pillow.readthedocs.io/en/stable/installation.html).
+In bright pictures, most of the pixels will have a high brightness value and fall into the highlight bin. The opposite is true for dark images and the shadow bin. This may result in a dominant tone as shown below:
 
-### Specifying Filepath
+![Imgur](https://imgur.com/0pG0N1P.jpg)
 
-To run colorizer on one or more pictures, you must specify a folder with supported images. You can specify the filepath for the folder with images by using the `-f` flag as follows:
+The image on the left has been edited using the default settings. Since the image is bright, most of the pixels fall into the highlight bin which is mapped to orange. You can change the size of the bins by using the `-shadowthreshold` flag. The flag changes the brightness ranges of the bins. The image on the right was created using the command `python colorizer.py -f <filepath> -splittone -shadowthreshold 160`. By increasing the upper bounds of the shadow bin to 160, more of the image is converted to teal.
 
-`python colorize.py -f insert_filepath_here`
+You can map the image to three tones instead of two using the `-tritone` flag. Tritoning creates a third bin called the midtone. Each pixel now falls into one of the following three categories:
 
-If the folder with images is /Users/arudrra/Images, here is how the command should look:
+1. Shadows (darkest pixels in an image)
+2. Midtones (pixels between shadows and highlights)
+3. Highlights (brightest pixels in an image)
 
-`python colorize.py -f /Users/arudrra/Images`
+The contiguous bins in tritoning are defined as follows:
 
-Colorizer will then apply the color edits to all supported files in the specified folder (/Users/arudrra/Images in the example above). Colorizer saves the file to the same folder with a `_colorized` appended to the end of the filename. You can edit the file ending by changing the `MODIFIED_FILENAME_ADDITION` global in the colorize.py file.
+1. A Shadow Bin containing pixels with a brightness value in between 0 and 89
+2. A Midtone Bin containing pixels with a brightness value in between 90 and 179
+3. A Highlight Bin containing pixels with a brightness value in between 180 and 255
 
-Colorizer supports files with JPG, JPEG, and PNG extensions. You can add or remove supported file types by modifying the `SUPPORTED_EXTENSIONS` global in the script. 
+### Usage
 
-### Python Versions
-Colorizer requires python3 to work. Depending on your environment, you may have to use python3 instead of python when running colorize:
-`python3 colorize.py -f /Users/arudrra/Images`
+File Options:
 
-### Runtime Notes
-Colorizer samples every image and computes every pixel value for each image. This process takes time, especially for larger images. Colorizer tells you which image is being processed at the moment and when the image has been colorized and saved. Quitting the script preemptively will cause the progress for the current image to be canceled.
+```
+-f <filepath>
+-e <optional extension>
+```
 
-## Under the Hood
+Boolean Options:
 
-### Editing Base Tones
-By default, highlights (brighter parts of the image) are pulled towards orange and shadows (darker parts of the image) are pulled towards teal. You can change the colors that both highlights and shadows are pulled towards with the `-hrgb` (highlight rgb) and `-srgb` (shadow rgb) flags.
+```
+-splittone
+-tritone
+```
 
-`python colorize.py -f /Users/arudrra/Images -srgb 100 141 145 -hrgb 194 0 24`
+Color Settings:
 
-Here is how the original image would look with the command above. The shadows are pulled towards the blue tone rgb(100,141,145) and highlights are pulled towards the red tone rgb(194,0,24) thus overriding the original orange and teal tones.
+```
+-flag <type [min value, max value]>
+```
 
-![Imgur](https://i.imgur.com/LgxtiET.jpg)
+You can edit the tones and tone distributions using the following settings:
 
-### Computing the Median Luminosity
-Colorizer computes the threshold luminosity (brightness) of the image by sampling evenly spaced pixels. The median luminosity of sampled pictures is used as a threshold for pulling colors. Any pixels with a luminosity lower than the median are classified as shadows while any pixels with a luminosity greater than the median are classified as highlights. Sampling for the median luminosity allows colorizer to classify and pull roughly 50% of the pixels in an image towards one color while pulling the remaining 50% of the pixels towards the other color.
+```
+-shadowthreshold <int [0:255]>
+-highlightthreshold <int [0:255]>
+-shadowhue <int [0:359]>
+-midtonehue <int [0:359]>
+-highlighthue <int [0:359]>
+```
 
-### Adjusting for Distortion
-In some images, the color edited image may be distorted due to a bad median value. For example, if most of the image is extremely bright (75% of the pixels are highlights), the median sampling will still force half of the pixels to be pulled towards the shadows (darker tones) so 25% of the highlight pixels will be misclassified as shadows.
 
-You can pass in an adjustment value into the command line via the `-t` flag to compensate for a bad median luminosity. The `-t` flag must be followed by a float value between -1.0 and 1.0 (inclusive). If a `-t` is not passed in, colorizer will assume a `-t` compensation of 0.0 (50% highlights and 50% shadows). A negative `-t` value pulls more than 50% of the image towards the shadow color and the strength of the effect is determined by how close to -1.0 the value is. A positive `-t` value pulls more than 50% of the image towards the highlight color and the strength of the effect is determined by how close to 1.0 the value is.
+Colorizer defaults to and orange and teal 
+```
+python colorizer.py -f /Pictures/example.jpg --splittone
+python colorizer.py -f /Pictures/example.jpg --tritone
+```
 
-`python colorize.py -f /Users/arudrra/Images -t .5`
+### Palettizer
+
+Documentation coming soon
+
+### Reverse Colorizer
+
+Documentation coming soon
+
+
