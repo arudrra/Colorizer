@@ -1,6 +1,6 @@
 # Introduction
 
-Colorizer was inspired by recent photography trends where images are often edited with orange and teal tones. The image on the left is the original while the image on the right Colorizer.
+Colorizer was inspired by recent photography trends where images are often edited with orange and teal tones. The image on the left is the original while the image on the right has been edited using Colorizer.
 
 ![Imgur](https://imgur.com/yyRh52s.jpg)
 
@@ -49,49 +49,68 @@ The contiguous bins in tritoning are defined as follows:
 
 ### Usage
 
-File Options:
+- `-f` or `--file` specifies the input file to be colorized.
 
-```
--f <filepath>
--e <optional extension>
-```
+- `-e` or `--extension` specifies the extension to be used for the output file. If not provided, the default string "_colorized" will be appended to the end of the colorized image's filename.
 
-Boolean Options:
+- `-splittone` or `--splittone` specifies whether to apply split-toning to the image. When enabled, the image is split into highlights and shadows, and a different color is applied to each.
 
-```
--splittone
--tritone
-```
+- `-tritone` or `--tritone` specifies whether to apply tri-toning to the image. When enabled, the image is split into three bins (shadows, midtones, and highlights), and a different color is applied to each.
 
-Color Settings:
+- `-shadowthreshold` or `--shadowthreshold` specifies the threshold for shadows in tri-toning. Pixels with a value (brightness) below this threshold are considered shadows. If not provided, the default value of 90 is used.
 
-```
--flag <type [min value, max value]>
-```
+- `-highlightthreshold` or `--highlightthreshold` specifies the threshold for highlights in tri-toning. Pixels with a value (brightness) above this threshold are considered highlights. If not provided, the default value of 180 is used.
 
-You can edit the tones and tone distributions using the following settings:
+- `-shadowhue` or `--shadowhue` specifies the hue (color) to be used for shadows. The hue is given in degrees, from 0 to 359. If not provided, the default value of 180 (teal) is used.
 
-```
--shadowthreshold <int [0:255]>
--highlightthreshold <int [0:255]>
--shadowhue <int [0:359]>
--midtonehue <int [0:359]>
--highlighthue <int [0:359]>
-```
+- `-midtonehue` or `--midtonehue` specifies the hue (color) to be used for midtones in tri-toning. The hue is given in degrees, from 0 to 359. If not provided, the default value of 40 (yellow) is used.
+
+- `-highlighthue` or `--highlighthue` specifies the hue (color) to be used for highlights. The hue is given in degrees, from 0 to 359. If not provided, the default value of 30 (orange) is used.
+
+You must specify a file.
+
+## Palettizer
+
+### How It Works
+
+Coming soon
+
+### Usage
+
+- `-f` or `--file` specifies the input file to be colorized.
+
+- `-g` or `--graph` produces a bar graph, where each bin corresponds to a fixed range of hues, and the height of the bar represents the number of pixels in the image that fall within that range. The color of each bar corresponds to the most frequent hue within that bin.
+
+- `-p` or `--percentage_graph` argument produces a similar bar graph, but the height of each bar represents the percentage of pixels in the image that fall within that bin, rather than the raw pixel count.
+
+- `-s` or `--scale` applies a logarithmic scaling (to the radius axis) to better show the differences between the hue bars. Most of the hues in the graph will not be visible unless the logarithmic scaling is applied.
+
+- `-b` or `--beautify` boosts all percentages to make all colors visible on the graph.
+
+You must specify a file and select either the graph or percentage_graph options.
 
 
-Colorizer defaults to and orange and teal 
-```
-python colorizer.py -f /Pictures/example.jpg --splittone
-python colorizer.py -f /Pictures/example.jpg --tritone
-```
+## Reverse Colorizer
 
-### Palettizer
+### How It Works
 
-Documentation coming soon
+Coming soon
 
-### Reverse Colorizer
+### Usage
 
-Documentation coming soon
+- `-t` or `--templatefile` specifies the path to the template image file. This is the image that the color palette will be generated from.
+
+- `-f` or `--filetoedit` specifies the path to the image file that will be colorized.
+
+- `-e` or `--extension`: specifies the extension to be used for the output file. If not provided, the default string "_colorized" will be appended to the end of the colorized image's filename.
+
+- `-b` or `--bins`: specifies the number of primary colors (hues) to "bin" (extract) from an image. If not specified, the default value will be used (6 colors for mode-based color mapping, and 2 colors for dynamically binned color mapping).
+
+- `-s` or `--significance`: specifies the significance threshold, which represents what percentage of an image must be made up of a single color for the color to be considered significant and used. If not specified, the default value will be used (0.05).
+
+- `-d` or `--dynamic`: specifies whether to use dynamically binned color mapping or not. If not specified, mode-based color mapping will be used.
+
+- `-m` or `--mode`: specifies whether to use mode-based color mapping or not. If not specified, dynamically binned color mapping will be used.
+
 
 
