@@ -74,29 +74,36 @@ def create_binned_by_mode_color_map(hues, num_pixels, num_bins, significance_thr
                 color_map[hue] = most_frequent_hue
     return color_bins, color_map
 
-#Expand each bin concurrently until the entire color map is filled without any overlap
+#Initialize hue bin in color map
 def calculate_and_populate_color_map_interval(color_map, hue, interval):
     interval = int(interval/2)
     #Calculate the color interval for the bin (accounting for the circular array ending at 179)
-    bin_interval_end = (hue + interval) % 180
-    bin_interval_start = hue - interval
-    if hue - interval < 0:
-        bin_interval_start = 180 + bin_interval_start
-    #Format for the interval is (start of bin, end of bin, bin hue)
-    bin_interval = (bin_interval_start, bin_interval_end)
+    bin_interval_end = hue
+    bin_interval_start = hue
     #Set all colors within the color interval to the most frequently occuring hue, account for the circular array
     color_map[hue] = hue
     for i in range(hue + 1, hue + interval + 1):
-        color_map[i%180] = hue        
-    for i in range(hue - interval, hue):
-        if i >= 0:
-            color_map[i] = hue
+        index = i % 180
+        if color_map[index] == -1:
+            color_map[index] = hue
+            bin_interval_end = index   
         else:
-            color_map[180+i] = hue
+            break      
+    for i in range(hue - 1, hue - interval - 1, -1):
+        index = i
+        if i < 0:
+            index = 180 + i
+        if color_map[index] == -1:
+            color_map[index] = hue
+            bin_interval_start = index
+        else:
+            break
+    bin_interval = (bin_interval_start, bin_interval_end)
     #Since the colormap is passed by reference, only return the computed bin interval
     return bin_interval
 
-#Expands the color bins until they cover the entire color map
+
+#Expand each bin concurrently until the entire color map is filled without any overlap
 def basic_merge_intervals(color_map, intervals):
     intervals = [[interval[0], interval[1], interval[2]] for interval in intervals]
     num_intervals = len(intervals)
@@ -138,7 +145,7 @@ def create_dynamically_binned_color_map(hues, num_pixels, num_bins, significance
     for i in range(180):
         significance, hue = hues_sorted_by_occurences[i][0], hues_sorted_by_occurences[i][1]
         if significance < significance_threshold:
-            print("Only " + str(bins) + " significant colors were found. Please lower the threshold for more color bins.")
+            print("Only " + str(bins) + " significant color(s) were found. Please lower the significance threshold (-s) for more color bins.")
             break
         if color_map[hue] == -1:
             bin_interval = calculate_and_populate_color_map_interval(color_map, hue, dynamic_bin_interval)
@@ -147,7 +154,7 @@ def create_dynamically_binned_color_map(hues, num_pixels, num_bins, significance
             bins += 1
             if bins == num_bins:
                 break
-    #The color map only 
+    #Merge all the intervals
     bin_intervals = basic_merge_intervals(color_map, bin_intervals)
     #Will add a softener function here in the future to make the transition between color intervals less harsh
     return color_bins, color_map

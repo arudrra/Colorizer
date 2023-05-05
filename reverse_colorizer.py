@@ -12,7 +12,7 @@ NUM_BINS_FOR_DYNAMIC = 2
 #Significance threshold represents what percentage of an image must be made up of a single color for the color to be considered significant and used
 SIGNIFICANCE_THRESHOLD = 0.05
 #Dynamic bin interval represents the starting size of the bin (a range of 15 hues) when generating a dynamic color map
-DYNAMIC_BIN_INTERVAL = 15
+DYNAMIC_BIN_INTERVAL = 30
 FILE_EXTENSION  = "_reverse_colorized"
 
 #Initialize all settings
@@ -46,11 +46,17 @@ def create_and_read_command_line_arguments():
     num_bins = args.bins
     if num_bins == None:
         num_bins = NUM_BINS_FOR_MODE if reverse_colorizer_mode == 1 else NUM_BINS_FOR_DYNAMIC
+    if reverse_colorizer_mode == 1 and args.dynamicbininterval != None:
+        print("Usage Error: The dynamic bin interval only works with dynamic binning (-b)")
+        sys.exit()
     if args.mode and 180%num_bins != 0:
         print("Usage Error: The number of bins must be a factor of 180 (e.g. 1, 2, 3, 4, 5, 6, 9, 10, 12, 15, 18, 20, 30, 36, 45, 60, 90 or 180)")
         sys.exit()
     if significance_threshold < 0 or significance_threshold > 1:
         print("Usage Error: The significance value must be between 0 and 1 (inclusive)")
+        sys.exit()
+    if dynamic_bin_interval < 1 or dynamic_bin_interval > 180:
+        print("Usage Error: The interval value must be between 1 and 180 (inclusive)")
         sys.exit()
     return args.templatefile, args.filetoedit, num_bins, significance_threshold, reverse_colorizer_mode, dynamic_bin_interval, extension
 
