@@ -11,6 +11,8 @@ NUM_BINS_FOR_MODE = 6
 NUM_BINS_FOR_DYNAMIC = 2
 #Significance threshold represents what percentage of an image must be made up of a single color for the color to be considered significant and used
 SIGNIFICANCE_THRESHOLD = 0.05
+#Dynamic bin interval represents the starting size of the bin (a range of 15 hues) when generating a dynamic color map
+DYNAMIC_BIN_INTERVAL = 15
 FILE_EXTENSION  = "_reverse_colorized"
 
 #Initialize all settings
@@ -23,11 +25,13 @@ def create_and_read_command_line_arguments():
     parser.add_argument("-s", "--significance", type=float)
     parser.add_argument("-d", "--dynamic", action=argparse.BooleanOptionalAction)
     parser.add_argument("-m", "--mode", action=argparse.BooleanOptionalAction)
+    parser.add_argument("-i", "--dynamicbininterval", type=int)
     parser.set_defaults(dynamic=False)
     parser.set_defaults(mode=False)
     args = parser.parse_args()
     extension = FILE_EXTENSION if args.extension == None else args.extension
     significance_threshold = SIGNIFICANCE_THRESHOLD if args.significance == None else args.significance
+    dynamic_bin_interval = DYNAMIC_BIN_INTERVAL if args.dynamicbininterval == None else args.dynamicbininterval
     if args.templatefile == None or args.filetoedit == None:
         print("Usage Error: Please provide both a template file (-t) and a file to edit (-f)")
         sys.exit()
@@ -48,7 +52,7 @@ def create_and_read_command_line_arguments():
     if significance_threshold < 0 or significance_threshold > 1:
         print("Usage Error: The significance value must be between 0 and 1 (inclusive)")
         sys.exit()
-    return args.templatefile, args.filetoedit, num_bins, significance_threshold, reverse_colorizer_mode, extension
+    return args.templatefile, args.filetoedit, num_bins, significance_threshold, reverse_colorizer_mode, dynamic_bin_interval, extension
 
 #Applies a color map (hue to hue mapping) to an image
 def apply_color_map(color_map, image):
@@ -67,23 +71,23 @@ def bin_tones_by_mode(template_image, image_to_colorize, num_bins, significance_
     return image_to_colorize
 
 #Uses dynamic bin sizes and ranges instead of fixed bin sizes
-def dynamically_bin_tones(template_image, image_to_colorize, num_bins, significance_threshold):
+def dynamically_bin_tones(template_image, image_to_colorize, num_bins, significance_threshold, dynamic_bin_interval):
     hues = count_all_hues(template_image)
     num_pixels = template_image.shape[0] * template_image.shape[1]
-    color_bins, color_map = create_dynamically_binned_color_map(hues, num_pixels, num_bins, significance_threshold)
+    color_bins, color_map = create_dynamically_binned_color_map(hues, num_pixels, num_bins, significance_threshold, dynamic_bin_interval)
     image_to_colorize = apply_color_map(color_map, image_to_colorize)
     return image_to_colorize
 
 def main():
     #Parse args and extract settings for colorizing
-    template_file, file_to_colorize, num_bins, significance_threshold, reverse_colorizer_mode, extension = create_and_read_command_line_arguments()
+    template_file, file_to_colorize, num_bins, significance_threshold, reverse_colorizer_mode, dynamic_bin_interval, extension = create_and_read_command_line_arguments()
     #Reverse Colorize Image
     template_image = open_and_read_image(template_file)
     image_to_colorize = open_and_read_image(file_to_colorize)
     if reverse_colorizer_mode == 1:
         image_to_colorize = bin_tones_by_mode(template_image, image_to_colorize, num_bins, significance_threshold)
     else:
-        image_to_colorize = dynamically_bin_tones(template_image, image_to_colorize, num_bins, significance_threshold)
+        image_to_colorize = dynamically_bin_tones(template_image, image_to_colorize, num_bins, significance_threshold, dynamic_bin_interval)
     #Save Image
     save_image(image_to_colorize, file_to_colorize, extension)
 

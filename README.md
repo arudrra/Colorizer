@@ -102,7 +102,7 @@ Coming soon
 
 - `-f` or `--filetoedit` specifies the path to the image file that will be colorized.
 
-- `-e` or `--extension`: specifies the extension to be used for the output file. If not provided, the default string "_colorized" will be appended to the end of the colorized image's filename.
+- `-e` or `--extension`: specifies the extension to be used for the output file. If not provided, the default string "_reverse_colorized" will be appended to the end of the colorized image's filename.
 
 - `-b` or `--bins`: specifies the number of primary colors (hues) to "bin" (extract) from an image. If not specified, the default value will be used (6 colors for mode-based color mapping, and 2 colors for dynamically binned color mapping).
 

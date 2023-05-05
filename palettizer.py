@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from shared_functions import open_and_read_image, convert_hsv_to_hex
 
-DYNAMIC_BIN_INTERVAL = 15
 BEAUTIFY_BOOST = 7
 
 #Initialize all settings
@@ -29,10 +28,13 @@ def initialize_settings():
     elif not args.graph and not args.percentagegraph:
         print("Usage Error: Please select either the graph (-g) or percentage graph (-p) option")
         sys.exit()
+    graph_option = 1 if args.graph else 2
+    if args.beautify and graph_option == 1:
+        print("Beautify is only available for percentage graphs")
+        sys.exit()
     if args.scale and args.beautify:
         print("Scale and beautify both improve legibility. When used together, they can create wildly innacurate graphs. Please select either scale or beautify.")
         sys.exit()
-    graph_option = 1 if args.graph else 2
     return args.file, graph_option, args.scale, args.beautify
 
 #Counts the number of occurrences of each hue
@@ -118,7 +120,7 @@ def basic_merge_intervals(color_map, intervals):
     return intervals
 
 #Create color bins for the most frequently occuring colors
-def create_dynamically_binned_color_map(hues, num_pixels, num_bins, significance_threshold=0):
+def create_dynamically_binned_color_map(hues, num_pixels, num_bins, significance_threshold, dynamic_bin_interval):
     #Created a list (sorted by number of occurences of each hue)
     hues_sorted_by_occurences = []
     for i in range(180):
@@ -139,7 +141,7 @@ def create_dynamically_binned_color_map(hues, num_pixels, num_bins, significance
             print("Only " + str(bins) + " significant colors were found. Please lower the threshold for more color bins.")
             break
         if color_map[hue] == -1:
-            bin_interval = calculate_and_populate_color_map_interval(color_map, hue, DYNAMIC_BIN_INTERVAL)
+            bin_interval = calculate_and_populate_color_map_interval(color_map, hue, dynamic_bin_interval)
             bin_interval = (bin_interval[0], bin_interval[1], hue, significance)
             bin_intervals.append(bin_interval)
             bins += 1
@@ -212,6 +214,7 @@ def measure_occurrences_of_all_hues(image, scale):
     graph_colors = create_full_spectrum_of_colors_for_graph()
     bar_outline_color = "white"
     if not scale:
+        print("This graph is not scaled (only the most frequently occuring colors will be visible). To better visualize all the colors in the graph use the -s flag.")
         bar_outline_color = None
     create_and_display_graph(hues, graph_colors, "Occurences of All Hues", scale, bar_outline_color)
 
@@ -226,8 +229,10 @@ def measure_percentage_of_hue_occurrences(image, scale, beautify):
     if beautify:
         for i in range(180):
             hues[i] += BEAUTIFY_BOOST
-        print("Due to the beautify option, all percentages in the graph are increased by " + str(BEAUTIFY_BOOST) +"%")
+        print("All percentages in the graph have been increased by " + str(BEAUTIFY_BOOST) +"%")
         bar_outline_color = 'white'
+    else:
+        print("This graph has not been boosted with beautify (only the most frequently occuring colors will appear). To better visualize all the colors in the graph use the -b flag.")
     create_and_display_graph(hues, graph_colors, "Percentage of All Hues", scale, bar_outline_color)
 
 #Displays results from reverse_colorizer binning

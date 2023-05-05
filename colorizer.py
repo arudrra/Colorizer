@@ -57,10 +57,10 @@ def initialize_settings():
     if shadow_hue < 0 or shadow_hue >= 180 or midtone_hue < 0 or midtone_hue >= 180 or highlight_hue < 0 or highlight_hue >= 180:
         print("Usage Error: Hues must be between 0 and 359 inclusive")
         sys.exit()
-    if shadow_threshold > highlight_threshold:
+    num_tones = 2 if split_tone else 3
+    if num_tones == 3 and shadow_threshold > highlight_threshold:
         print("Usage Error: Shadow threshold must be less than highlight threshold")
         sys.exit()
-    num_tones = 2 if split_tone else 3
     return filepath, num_tones, shadow_threshold, highlight_threshold, highlight_hue, midtone_hue, shadow_hue, extension
 
 #Split tone pulls an image towards 2 colors
