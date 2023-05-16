@@ -1,4 +1,5 @@
 #Written by Arudrra Krishnan
+#Occurrence has been mispelled in a few different ways in this file, I will fix it later
 
 import sys
 import argparse
@@ -223,7 +224,7 @@ def measure_occurrences_of_all_hues(image, scale):
     if not scale:
         print("This graph is not scaled (only the most frequently occuring colors will be visible). To better visualize all the colors in the graph use the -s flag.")
         bar_outline_color = None
-    create_and_display_graph(hues, graph_colors, "Occurences of All Hues", scale, bar_outline_color)
+    create_and_display_graph(hues, graph_colors, "Occurrences of All Hues", scale, bar_outline_color)
 
 def measure_percentage_of_hue_occurrences(image, scale, beautify):
     hues = count_all_hues(image)

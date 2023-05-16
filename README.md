@@ -100,7 +100,7 @@ Reverse colorizer changes the colors of a picture to match the colors of another
 
 In this example, a color palette is generated from Image 2 and applied to Image 1. Here is another example of reverse colorizer in action:
 
-![Imgur](https://imgur.com/7QNOdfs.jpg)
+![Imgur](https://imgur.com/FAWOatM.jpg)
 
 The green and yellow colors from the foliage in Image 2 have been applied to Image 1. The red from the brake in Image 2 has been applied to the ground in Image 1. Note: The final image has some color noise. Solutions for minimizing color noise are provided in the troubleshooting section.
 
